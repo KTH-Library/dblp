@@ -1,0 +1,38 @@
+Package: dblp
+Title: Computer Science Bibliographic Data from the dblp.org API
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Markus",
+           family = "Skyttner",
+           role = c("cre", "aut"),
+           email = "markussk@kth.se")
+Description: The dblp computer science bibliography at dblp.org
+    provides open bibliographic information on major computer science
+    journals and proceedings. Originally created at the University of
+    Trier in 1993, dblp is now operated and further developed by Schloss
+    Dagstuhl. This R package interfaces with the API, making data
+    available to use from R.
+License: MIT + file LICENSE
+URL: https://github.com/KTH-Library/dblp
+BugReports: https://github.com/KTH-Library/dblp/issues
+Imports: 
+    attempt,
+    stringr,
+    curl,
+    dplyr,
+    httr,
+    jsonlite,
+    progress,
+    purrr,
+    rlang,
+    tibble
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 2.1.0)
+VignetteBuilder: 
+    knitr
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.0.2

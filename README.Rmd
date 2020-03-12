@@ -1,0 +1,87 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# dblp
+
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+<!-- badges: end -->
+
+The dblp computer science bibliography at [dblp.org](https://dblp.org) provides open bibliographic information on major computer science journals and proceedings. Originally created at the University of Trier in 1993, dblp is now operated and further developed by Schloss
+Dagstuhl. This R package interfaces with the API, making data available to use from R.
+
+## Installation
+
+You can install the development version of dblp from GitHub with:
+
+``` r
+#install.packages("devtools")
+install_github("KTH-Library/dblp", dependencies = TRUE)
+```
+
+## Example
+
+This is a basic example which shows you how make a search :
+
+```{r example}
+library(dblp)
+library(knitr)
+library(stringr)
+suppressPackageStartupMessages(library(dplyr))
+
+# search for publications
+
+dblp_search("quantum computer")$content %>%
+  select(starts_with("info")) %>%
+  mutate(result = paste(`info.title`, `info.ee`, `info.url`)) %>%
+  select(result) %>%
+  slice(1:5) %>%
+  kable()
+
+# crawl when there are many pages of results
+
+
+search <- dblp_crawl("Royal Institute")$content
+
+# display results
+search %>%
+  filter(str_detect(`info.ee`, "kth:diva")) %>%
+  arrange(desc(`info.year`)) %>%
+  # rename and order some named and indexed columns
+  select(DOI = `info.doi`, 9:4) %>%
+  # add a HTML link by combining title and use DOI for href
+  mutate(link = sprintf("<a href='https://doi.org/%s'>%s...</a>", 
+    DOI, str_sub(`info.title`, 1, 50))) %>%
+  # pick out a few columns to display in a HTML table
+  select(link, 1:4, -c("DOI", "info.ee"), `info.year`) %>%
+  slice(1:5) %>%
+  kable()
+
+# search for venues
+
+dblp_crawl("Europe", entity = "venues")$content %>%
+  slice(1:5) %>%
+  select(starts_with("info")) %>%
+  kable()
+
+# search for authors
+
+dblp_crawl("maguire", entity = "authors")$content %>%
+  select(starts_with("info")) %>%
+  filter(stringr::str_starts(`info.author`, "Ger")) %>%
+  kable()
+
+```
+
