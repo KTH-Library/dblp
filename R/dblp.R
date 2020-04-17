@@ -2,8 +2,6 @@
 
 #' Retrieve records from dblp API
 #'
-#' The database used can be specified - the default is to use LIBRIS but "swepub" is also available
-#'
 #' @param query the query string to search for, as described in \url{https://dblp.org/faq/13501473.html}, for example q=test+search
 #' @param start the "f"irst hit in the numbered sequence of search results to return. In combination with the h parameter, this parameter can be used for pagination of search results
 #' @param n maximum number of search results ("h"its) to return. For bandwidth reasons, this number is capped at 1000

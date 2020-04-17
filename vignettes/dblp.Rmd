@@ -79,3 +79,47 @@ dblp_crawl("maguire", entity = "authors")$content %>%
   kable()
 
 ```
+
+# Altmetric data for specific publication
+
+How to retrieve Altmetric Count for a specific article using the Altmetric from the
+Altmetric Details Page - Counts Only API:
+
+```{r}
+
+library(dblp)
+library(dplyr)
+library(knitr)
+library(httr)
+
+# DOIs found for a specific author
+dois <- 
+  dblp_search("Gerald Q. Maguire Jr.")$content %>% pull(`info.doi`)
+
+# Pick one and retrieve Altmetric data from the
+# Altmetric Details Page - Counts Only API
+# https://docs.google.com/spreadsheets/d/1ndVY8Q2LOaZO_P_HDmSQulagjeUrS250mAL2N5V8GvY/edit#gid=0
+# https://help.altmetric.com/support/solutions/articles/6000086844-sample-api-response
+
+urls <- sprintf("https://api.altmetric.com/v1/doi/%s", dois)
+resp <- GET(urls[6])
+parsed <- content(resp)
+
+link <- 
+  sprintf("<a href='%s' title='%s'><img src='%s'></img>%s with DOI: %s</a>", 
+        parsed$details_url, parsed$title, parsed$images$medium, parsed$title, parsed$doi)
+
+
+```
+
+We can now display a link to the Altmetric Details Page for this article:
+
+```{r, results="asis",echo=FALSE}
+
+cat(link)
+
+```
+
+Attribution for the above link:
+
+> Altmetrics data is provided by Altmetric.com, a research metrics company who track and collect the online conversations around millions of scholarly outputs. Altmetric continually monitors a variety of non-traditional sources to provide real-time updates on new mentions and shares of individual research outputs, which are collated and presented to users via the Altmetric details pages and badge visualisations. Each research output that Altmetric finds attention for is also given a score; a weighted count of the online attention it has received. Further information about [how the Altmetric Attention Score is calculated is available here](https://www.altmetric.com/about-our-data/the-donut-and-score/).

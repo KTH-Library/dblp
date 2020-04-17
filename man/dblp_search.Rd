@@ -30,7 +30,7 @@ dblp_search(
 results records returned from the search
 }
 \description{
-The database used can be specified - the default is to use LIBRIS but "swepub" is also available
+Retrieve records from dblp API
 }
 \examples{
 \dontrun{
