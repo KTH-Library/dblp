@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![R-CMD-check](https://github.com/KTH-Library/dblp/workflows/R-CMD-check/badge.svg)](https://github.com/KTH-Library/dblp/actions)
 <!-- badges: end -->
 
 The dblp computer science bibliography at [dblp.org](https://dblp.org) provides open bibliographic information on major computer science journals and proceedings. Originally created at the University of Trier in 1993, dblp is now operated and further developed by Schloss

@@ -7,6 +7,7 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![R-CMD-check](https://github.com/KTH-Library/dblp/workflows/R-CMD-check/badge.svg)](https://github.com/KTH-Library/dblp/actions)
 <!-- badges: end -->
 
 The dblp computer science bibliography at [dblp.org](https://dblp.org)
@@ -45,16 +46,15 @@ dblp_search("quantum computer")$content %>%
   kable()
 ```
 
-| result                                                                                                                                                                                                                                               |
-| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Implementation of quantum secret sharing and quantum binary voting protocol in the IBM quantum computer. <https://doi.org/10.1007/s11128-019-2531-z> <https://dblp.org/rec/journals/qip/JoySBP20>                                                    |
-| Quantum Computing for Computer Architects, Second Edition <https://doi.org/10.2200/S00331ED1V01Y201101CAC013> <https://dblp.org/rec/series/synthesis/2011Metodi>                                                                                     |
-| Quantum Communication and Quantum Networking, First International Conference, QuantumComm 2009, Naples, Italy, October 26-30, 2009, Revised Selected Papers <https://doi.org/10.1007/978-3-642-11731-2> <https://dblp.org/rec/conf/quantumcomm/2009> |
-| Quantum Computer Science <https://doi.org/10.2200/S00159ED1V01Y200810QMC002> <https://dblp.org/rec/series/synthesis/2008Lanzagorta>                                                                                                                  |
-| Quantum Walks for Computer Scientists <https://doi.org/10.2200/S00144ED1V01Y200808QMC001> <https://dblp.org/rec/series/synthesis/2008Venegas>                                                                                                        |
+| result                                                                                                                                                                                                          |
+|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Quantum Computers and Quantum Computer Languages - Quantum Assembly Language and Quantum C Language <http://arxiv.org/abs/quant-ph/0201082> <https://dblp.org/rec/journals/corr/quant-ph-0201082>               |
+| Design of a quantum repeater using quantum circuits and benchmarking its performance on an IBM quantum computer. <https://doi.org/10.1007/s11128-021-03189-8> <https://dblp.org/rec/journals/qip/DasRM21>       |
+| Demonstration of minisuperspace quantum cosmology using quantum computational algorithms on IBM quantum computer. <https://doi.org/10.1007/s11128-021-03180-3> <https://dblp.org/rec/journals/qip/GangulyDBP21> |
+| Implementation of quantum secret sharing and quantum binary voting protocol in the IBM quantum computer. <https://doi.org/10.1007/s11128-019-2531-z> <https://dblp.org/rec/journals/qip/JoySBP20>               |
+| Quantum Computing for Computer Architects, Second Edition <https://doi.org/10.2200/S00331ED1V01Y201101CAC013> <https://dblp.org/rec/series/synthesis/2011Metodi>                                                |
 
 ``` r
-
 # crawl when there are many pages of results
 
 
@@ -75,16 +75,15 @@ search %>%
   kable()
 ```
 
-| link                                                                                 | info.url                                           | info.key                    | info.year |
-| :----------------------------------------------------------------------------------- | :------------------------------------------------- | :-------------------------- | :-------- |
-| <a href='https://doi.org/NA'>Data-driven Methods in Inverse Problems….</a>           | <https://dblp.org/rec/phd/basesearch/Adler19>      | phd/basesearch/Adler19      | 2019      |
-| <a href='https://doi.org/NA'>Scalable Analysis of Large Datasets in Life Scienc…</a> | <https://dblp.org/rec/phd/basesearch/Ahmed19>      | phd/basesearch/Ahmed19      | 2019      |
-| <a href='https://doi.org/NA'>Feasibility and Performance of Dynamic TDD in Dens…</a> | <https://dblp.org/rec/phd/basesearch/Celik19>      | phd/basesearch/Celik19      | 2019      |
-| <a href='https://doi.org/NA'>Graph Algorithms for Large-Scale and Dynamic Natur…</a> | <https://dblp.org/rec/phd/basesearch/Ghoorchian19> | phd/basesearch/Ghoorchian19 | 2019      |
-| <a href='https://doi.org/NA'>Macroscopic models of Chinese hamster ovary cell c…</a> | <https://dblp.org/rec/phd/basesearch/Hagrot19>     | phd/basesearch/Hagrot19     | 2019      |
+| link                                                                                 | info.url                                               | info.key                        | info.year |
+|:-------------------------------------------------------------------------------------|:-------------------------------------------------------|:--------------------------------|:----------|
+| <a href='https://doi.org/NA'>Short-term Underground Mine Scheduling - An Indust…</a> | <https://dblp.org/rec/phd/basesearch/Astrand21>        | phd/basesearch/Astrand21        | 2021      |
+| <a href='https://doi.org/NA'>Topological and geometrical methods in data analys…</a> | <https://dblp.org/rec/phd/basesearch/Gafvert21>        | phd/basesearch/Gafvert21        | 2021      |
+| <a href='https://doi.org/NA'>Neural Network Architecture Design - Towards Low-c…</a> | <https://dblp.org/rec/phd/basesearch/Javid21>          | phd/basesearch/Javid21          | 2021      |
+| <a href='https://doi.org/NA'>Mobile Network Operator Collaboration using Deep R…</a> | <https://dblp.org/rec/phd/basesearch/Karapantelakis21> | phd/basesearch/Karapantelakis21 | 2021      |
+| <a href='https://doi.org/NA'>Decentralized Learning of Randomization-based Neur…</a> | <https://dblp.org/rec/phd/basesearch/Liang21>          | phd/basesearch/Liang21          | 2021      |
 
 ``` r
-
 # search for venues
 
 dblp_crawl("Europe", entity = "venues")$content %>%
@@ -93,16 +92,15 @@ dblp_crawl("Europe", entity = "venues")$content %>%
   kable()
 ```
 
-| info.venue                                                                        | info.acronym | info.type              | info.url                              |
-| :-------------------------------------------------------------------------------- | :----------- | :--------------------- | :------------------------------------ |
-| Central European Cybersecurity Conference (CECC)                                  | CECC         | Conference or Workshop | <https://dblp.org/db/conf/cecc/>      |
-| Central European Functional Programming School (CEFP)                             | CEFP         | Conference or Workshop | <https://dblp.org/db/conf/cefp/>      |
-| Central European Journal of Operations Research                                   | NA           | Journal                | <https://dblp.org/db/journals/cejor/> |
-| Central and East European Conference on Software Engineering Techniques (CEE-SET) | CEE-SET      | Conference or Workshop | <https://dblp.org/db/conf/ifip2/>     |
-| Central-European Workshop on Services and their Composition (ZEUS)                | ZEUS         | Conference or Workshop | <https://dblp.org/db/conf/zeus/>      |
+| info.venue                                                                         | info.acronym | info.type              | info.url                                 |
+|:-----------------------------------------------------------------------------------|:-------------|:-----------------------|:-----------------------------------------|
+| Annual Conference of the European Association for Computer Graphics (Eurographics) | Eurographics | Conference or Workshop | <https://dblp.org/db/conf/eurographics/> |
+| Applications and Theory of Petri Nets (Petri Nets)                                 | Petri Nets   | Conference or Workshop | <https://dblp.org/db/conf/apn/>          |
+| Bulletin of the EATCS                                                              | NA           | Journal                | <https://dblp.org/db/journals/eatcs/>    |
+| Central European Cybersecurity Conference (CECC)                                   | CECC         | Conference or Workshop | <https://dblp.org/db/conf/cecc/>         |
+| Central European Functional Programming School (CEFP)                              | CEFP         | Conference or Workshop | <https://dblp.org/db/conf/cefp/>         |
 
 ``` r
-
 # search for authors
 
 dblp_crawl("maguire", entity = "authors")$content %>%
@@ -111,7 +109,7 @@ dblp_crawl("maguire", entity = "authors")$content %>%
   kable()
 ```
 
-| info.author           | info.url                             | info.aliases.alias | info.notes.note.@type | info.notes.note.text                                 |
-| :-------------------- | :----------------------------------- | :----------------- | :-------------------- | :--------------------------------------------------- |
-| Gerald Q. Maguire Jr. | <https://dblp.org/pid/m/GQMaguireJr> | NULL               | affiliation           | KTH Royal Institute of Technology, Stockholm, Sweden |
-| Gerry Maguire         | <https://dblp.org/pid/255/3148>      | NULL               | NA                    | NA                                                   |
+| info.author           | info.url                             | info.aliases.alias | info.notes.note                                                    |
+|:----------------------|:-------------------------------------|:-------------------|:-------------------------------------------------------------------|
+| Gerald Q. Maguire Jr. | <https://dblp.org/pid/m/GQMaguireJr> | NULL               | affiliation , KTH Royal Institute of Technology, Stockholm, Sweden |
+| Gerry Maguire         | <https://dblp.org/pid/255/3148>      | NULL               | NULL                                                               |
