@@ -72,7 +72,7 @@ dblp_search <- function(
     tryCatch(
       x$result$hits$hit %>%
       jsonlite::flatten() %>%
-      as_tibble(), #as_tibble(.name_repair = "universal")
+      as_tibble() %>% mutate(across(everything(), as.character)), #as_tibble(.name_repair = "universal")
       error = function(e) as_tibble(NULL)
     )
   }
