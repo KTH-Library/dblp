@@ -37,9 +37,17 @@ library(stringr)
 suppressPackageStartupMessages(library(dplyr))
 
 # the live dblp API is occasionally unreachable or rate-limited (this
-# happens especially from shared CI runner IPs), so calls below are
-# wrapped to degrade gracefully instead of failing the vignette build
-safe_content <- function(expr) tryCatch(expr, error = function(e) NULL)
+# happens especially from shared CI runner IPs), and can hang rather
+# than returning an error promptly, so calls below are bounded by a
+# wall-clock timeout and wrapped to degrade gracefully instead of
+# failing (or stalling) the vignette build
+safe_content <- function(expr) {
+  tryCatch({
+    setTimeLimit(elapsed = 15, transient = TRUE)
+    on.exit(setTimeLimit(elapsed = Inf, transient = FALSE))
+    force(expr)
+  }, error = function(e) NULL)
+}
 
 # search for publications
 
@@ -123,9 +131,13 @@ library(knitr)
 library(httr)
 
 # the dblp/Altmetric APIs are occasionally unreachable or rate-limited
-# (this happens especially from shared CI runner IPs), so this example
-# is wrapped to degrade gracefully instead of failing the vignette build
+# (this happens especially from shared CI runner IPs), and can hang
+# rather than returning an error promptly, so this example is bounded
+# by a wall-clock timeout and wrapped to degrade gracefully instead of
+# failing (or stalling) the vignette build
 link <- tryCatch({
+  setTimeLimit(elapsed = 15, transient = TRUE)
+  on.exit(setTimeLimit(elapsed = Inf, transient = FALSE))
 
   # DOIs found for a specific author
   dois <-
