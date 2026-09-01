@@ -36,51 +36,77 @@ library(knitr)
 library(stringr)
 suppressPackageStartupMessages(library(dplyr))
 
+# the live dblp API is occasionally unreachable or rate-limited (this
+# happens especially from shared CI runner IPs), so calls below are
+# wrapped to degrade gracefully instead of failing the vignette build
+safe_content <- function(expr) tryCatch(expr, error = function(e) NULL)
+
 # search for publications
 
-dblp_search("quantum computer")$content %>%
-  select(starts_with("info")) %>%
-  mutate(result = paste(`info.title`, `info.ee`, `info.url`)) %>%
-  select(result) %>%
-  slice(1:5) %>%
-  kable()
+qc <- safe_content(dblp_search("quantum computer")$content)
+
+if (!is.null(qc)) {
+  qc %>%
+    select(starts_with("info")) %>%
+    mutate(result = paste(`info.title`, `info.ee`, `info.url`)) %>%
+    select(result) %>%
+    slice(1:5) %>%
+    kable()
+} else {
+  cat("_dblp API unavailable at vignette build time; example output omitted._")
+}
 
 # crawl when there are many pages of results
 
-
-search <- dblp_crawl("Royal Institute")$content
+search <- safe_content(dblp_crawl("Royal Institute")$content)
 
 # the dblp API omits the info.doi column entirely when none of the
 # returned records have a DOI, so ensure it exists before selecting it
-if (!"info.doi" %in% names(search)) search$info.doi <- NA_character_
+if (!is.null(search) && !"info.doi" %in% names(search)) search$info.doi <- NA_character_
 
 # display results
-search %>%
-  filter(str_detect(`info.ee`, "kth:diva")) %>%
-  arrange(desc(`info.year`)) %>%
-  # rename and order some named and indexed columns
-  select(DOI = `info.doi`, 9:4) %>%
-  # add a HTML link by combining title and use DOI for href
-  mutate(link = sprintf("<a href='https://doi.org/%s'>%s...</a>", 
-    DOI, str_sub(`info.title`, 1, 50))) %>%
-  # pick out a few columns to display in a HTML table
-  select(link, 1:4, -c("DOI", "info.ee"), `info.year`) %>%
-  slice(1:5) %>%
-  kable()
+if (!is.null(search)) {
+  search %>%
+    filter(str_detect(`info.ee`, "kth:diva")) %>%
+    arrange(desc(`info.year`)) %>%
+    # rename and order some named and indexed columns
+    select(DOI = `info.doi`, 9:4) %>%
+    # add a HTML link by combining title and use DOI for href
+    mutate(link = sprintf("<a href='https://doi.org/%s'>%s...</a>",
+      DOI, str_sub(`info.title`, 1, 50))) %>%
+    # pick out a few columns to display in a HTML table
+    select(link, 1:4, -c("DOI", "info.ee"), `info.year`) %>%
+    slice(1:5) %>%
+    kable()
+} else {
+  cat("_dblp API unavailable at vignette build time; example output omitted._")
+}
 
 # search for venues
 
-dblp_crawl("Europe", entity = "venues")$content %>%
-  slice(1:5) %>%
-  select(starts_with("info")) %>%
-  kable()
+venues <- safe_content(dblp_crawl("Europe", entity = "venues")$content)
+
+if (!is.null(venues)) {
+  venues %>%
+    slice(1:5) %>%
+    select(starts_with("info")) %>%
+    kable()
+} else {
+  cat("_dblp API unavailable at vignette build time; example output omitted._")
+}
 
 # search for authors
 
-dblp_crawl("maguire", entity = "authors")$content %>%
-  select(starts_with("info")) %>%
-  filter(stringr::str_starts(`info.author`, "Ger")) %>%
-  kable()
+authors <- safe_content(dblp_crawl("maguire", entity = "authors")$content)
+
+if (!is.null(authors)) {
+  authors %>%
+    select(starts_with("info")) %>%
+    filter(stringr::str_starts(`info.author`, "Ger")) %>%
+    kable()
+} else {
+  cat("_dblp API unavailable at vignette build time; example output omitted._")
+}
 
 ```
 
@@ -96,23 +122,28 @@ library(dplyr)
 library(knitr)
 library(httr)
 
-# DOIs found for a specific author
-dois <- 
-  dblp_search("Gerald Q. Maguire Jr.")$content %>% pull(`info.doi`)
+# the dblp/Altmetric APIs are occasionally unreachable or rate-limited
+# (this happens especially from shared CI runner IPs), so this example
+# is wrapped to degrade gracefully instead of failing the vignette build
+link <- tryCatch({
 
-# Pick one and retrieve Altmetric data from the
-# Altmetric Details Page - Counts Only API
-# https://docs.google.com/spreadsheets/d/1ndVY8Q2LOaZO_P_HDmSQulagjeUrS250mAL2N5V8GvY/edit#gid=0
-# https://help.altmetric.com/support/solutions/articles/6000086844-sample-api-response
+  # DOIs found for a specific author
+  dois <-
+    dblp_search("Gerald Q. Maguire Jr.")$content %>% pull(`info.doi`)
 
-urls <- sprintf("https://api.altmetric.com/v1/doi/%s", dois)
-resp <- GET(urls[6])
-parsed <- content(resp)
+  # Pick one and retrieve Altmetric data from the
+  # Altmetric Details Page - Counts Only API
+  # https://docs.google.com/spreadsheets/d/1ndVY8Q2LOaZO_P_HDmSQulagjeUrS250mAL2N5V8GvY/edit#gid=0
+  # https://help.altmetric.com/support/solutions/articles/6000086844-sample-api-response
 
-link <- 
-  sprintf("<a href='%s' title='%s'><img src='%s'></img>%s with DOI: %s</a>", 
-        parsed$details_url, parsed$title, parsed$images$medium, parsed$title, parsed$doi)
+  urls <- sprintf("https://api.altmetric.com/v1/doi/%s", dois)
+  resp <- GET(urls[6])
+  parsed <- content(resp)
 
+  sprintf("<a href='%s' title='%s'><img src='%s'></img>%s with DOI: %s</a>",
+    parsed$details_url, parsed$title, parsed$images$medium, parsed$title, parsed$doi)
+
+}, error = function(e) "<em>dblp/Altmetric API unavailable at vignette build time; example output omitted.</em>")
 
 ```
 
