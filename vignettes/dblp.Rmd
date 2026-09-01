@@ -50,6 +50,10 @@ dblp_search("quantum computer")$content %>%
 
 search <- dblp_crawl("Royal Institute")$content
 
+# the dblp API omits the info.doi column entirely when none of the
+# returned records have a DOI, so ensure it exists before selecting it
+if (!"info.doi" %in% names(search)) search$info.doi <- NA_character_
+
 # display results
 search %>%
   filter(str_detect(`info.ee`, "kth:diva")) %>%
